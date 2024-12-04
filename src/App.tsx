@@ -1,23 +1,43 @@
-import { useDispatch } from "react-redux"
-import { useAppSelector } from './redux/hooks'
-import { decrement, increment } from "./redux/counter/counterSlice"
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import AppLayout from './components/layout/app.layout'
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <AppLayout />,
+    children: [
+      {
+        index: true,
+        element: <div>home page</div>
+      },
+      {
+        path: 'book',
+        element: <div>book page</div>
+      },
+      {
+        path: 'order',
+        element: <div>order page</div>
+      },
+      {
+        path: 'history',
+        element: <div>history page</div>
+      }
+    ]
+  },
+  {
+    path: '/login',
+    element: <div>login page</div>
+  },
+  {
+    path: '/register',
+    element: <div>register</div>
+  }
+])
+
+
 const App = () => {
-
-  const dispatch = useDispatch()
-
-  const value: number = useAppSelector(state => state.counter.value)
-
   return (
-    <>
-      <div>
-        <span style={{ padding: "20px", backgroundColor: "red", cursor: "pointer" }}
-          onClick={() => { dispatch(decrement()) }}
-        >minus</span>
-        <span style={{ padding: "20px", backgroundColor: "blue" }}>{value}</span>
-        <span style={{ padding: "20px", backgroundColor: "green", cursor: "pointer" }}
-          onClick={() => { dispatch(increment()) }}>plus</span>
-      </div>
-    </>
+    <RouterProvider router={router} />
   )
 }
 
