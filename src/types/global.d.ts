@@ -18,4 +18,10 @@ declare global {
         },
         result: T[]
     }
+
+    interface IRegister {
+        _id: string;
+        email: string;
+        fullName: string
+    }
 }

@@ -1,9 +1,36 @@
+import { registerAPI } from "@/services/api.service";
 import { ArrowLeftOutlined } from "@ant-design/icons"
-import { Button, Col, Divider, Form, Input, Row } from "antd"
-
+import { Button, Col, Divider, Form, Input, message, notification, Row } from "antd"
+import type { FormProps } from 'antd';
+import { useNavigate } from "react-router-dom";
 const Register = () => {
 
     const [form] = Form.useForm()
+
+    const navigate = useNavigate()
+
+    type FieldType = {
+        fullName: string;
+        password: string;
+        email: string;
+        phone: string;
+    }
+
+    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+        const { phone, email, fullName, password } = values
+        const res = await registerAPI(fullName, email, password, phone)
+        if (res?.data?._id) {
+            message.success('Register successfully!')
+            form.resetFields()
+            navigate('/login')
+        } else {
+            notification.error({
+                message: 'Register failed!',
+                description: res.message
+            })
+        }
+    }
+
 
     return (
         <Row className="row">
@@ -16,10 +43,12 @@ const Register = () => {
                         <Form
                             layout="vertical"
                             form={form}
-                            onFinish={() => { }}
+                            onFinish={onFinish}
                             autoComplete="off"
                         >
-                            <Form.Item
+
+
+                            <Form.Item<FieldType>
                                 name="fullName"
                                 label="Full name"
                                 rules={[
@@ -34,7 +63,9 @@ const Register = () => {
                                     className="input" />
                             </Form.Item>
 
-                            <Form.Item
+
+
+                            <Form.Item<FieldType>
                                 name="email"
                                 label="Email"
                                 rules={[
@@ -53,7 +84,7 @@ const Register = () => {
                                     className="input" />
                             </Form.Item>
 
-                            <Form.Item
+                            <Form.Item<FieldType>
                                 name="password"
                                 label="Password"
                                 rules={[
@@ -68,7 +99,7 @@ const Register = () => {
                                     className="input" />
                             </Form.Item>
 
-                            <Form.Item
+                            <Form.Item<FieldType>
                                 name="phone"
                                 label="Phone number"
                                 rules={[
@@ -85,11 +116,14 @@ const Register = () => {
                         </Form>
 
                         <div className="option">
-                            <a href="#">
+                            <a onClick={() => { navigate('/') }}>
                                 <ArrowLeftOutlined /> Go to home page
                             </a>
 
-                            <Button color="primary" variant="solid">
+                            <Button
+                                color="primary"
+                                variant="solid"
+                                onClick={() => { form.submit() }}>
                                 Register
                             </Button>
                         </div>
@@ -97,7 +131,7 @@ const Register = () => {
                         <Divider />
 
                         <div className="register-footer">
-                            Already have an account? <a href="#">Login here</a>
+                            Already have an account? <a onClick={() => { navigate('/login') }}>Login here</a>
                         </div>
                     </fieldset>
                 </div>
