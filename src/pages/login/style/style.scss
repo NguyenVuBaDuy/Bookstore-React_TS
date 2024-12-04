@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+.login-page {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background-image: url(../images/pexels-photo-1372971-Recovered.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 100%;
+
+    .row {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .login-form {
+            fieldset {
+                padding: 20px;
+                margin: 5px;
+                border: 2px solid #ccc;
+                border-radius: 5px;
+                background-color: rgba(255, 255, 255, 0.9);
+
+                h2 {
+                    font-family: "Great Vibes", cursive;
+                    font-size: 100px;
+                }
+
+                .input {
+                    width: 100%;
+                    padding: 10px;
+                    font-size: 16px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    outline: none;
+                }
+
+
+                input::placeholder {
+                    color: #aaa;
+                    font-style: italic;
+                }
+
+                label {
+                    font-family: "Montserrat", sans-serif;
+                    font-weight: 400;
+                }
+
+                .ifHadAccount {
+                    font-family: "Montserrat", sans-serif;
+                }
+
+                input:hover {
+                    border-color: #4096ff;
+                    border-inline-end-width: 1px;
+                    z-index: 1;
+                }
+
+                .option {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+                .login-footer {
+                    font-family: "Montserrat", sans-serif;
+                }
+            }
+        }
+    }
+
+
+}

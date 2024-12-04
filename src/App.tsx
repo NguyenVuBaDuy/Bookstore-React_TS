@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import AppLayout from 'components/layout/app.layout'
-import RegisterPage from '@/pages/register/register.page'
+import RegisterPage from 'pages/register/register.page'
+import LoginPage from 'pages/login/login.page'
 
 const router = createBrowserRouter([
   {
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <div>login page</div>
+    element: <LoginPage />
   },
   {
     path: '/register',
