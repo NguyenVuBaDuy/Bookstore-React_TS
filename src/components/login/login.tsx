@@ -1,7 +1,9 @@
+import { doLoginAction } from "redux/account/accountSlice";
 import { ArrowLeftOutlined } from "@ant-design/icons"
 import { Button, Col, Divider, Form, Input, message, notification, Row } from "antd"
 import type { FormProps } from 'antd';
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginAPI } from "services/api.service";
 
@@ -13,16 +15,16 @@ type FieldType = {
 const Login = () => {
 
     const [form] = Form.useForm()
-
     const navigate = useNavigate()
-
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const dispatch = useDispatch()
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         setIsLoading(true)
         const { email, password } = values
         const res = await loginAPI(email, password)
         if (res.data) {
+            dispatch(doLoginAction(res.data.user))
             message.success('Login successfully')
             navigate('/')
             localStorage.setItem('access_token', res.data.access_token)
