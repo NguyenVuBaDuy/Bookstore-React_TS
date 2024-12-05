@@ -1,17 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface IDataAccount {
-    id: string;
-    email: string;
-    phone: string;
-    fullName: string;
-    role: string;
-    avatar: string;
-}
+
 
 interface IAccountState {
     isAuthenticated: boolean;
-    user: IDataAccount;
+    user: IDataUser;
 }
 
 
@@ -32,13 +25,17 @@ const accountSlice = createSlice({
     name: 'account',
     initialState,
     reducers: {
-        doLoginAction: (state, action: PayloadAction<IDataAccount>) => {
+        doLoginAction: (state, action: PayloadAction<IDataUser>) => {
+            state.isAuthenticated = true
+            state.user = action.payload
+        },
+        doGetAccountAction: (state, action: PayloadAction<IDataUser>) => {
             state.isAuthenticated = true
             state.user = action.payload
         },
     },
 });
 
-export const { doLoginAction } = accountSlice.actions;
+export const { doLoginAction, doGetAccountAction } = accountSlice.actions;
 
 export default accountSlice.reducer;

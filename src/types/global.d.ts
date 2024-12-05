@@ -2,6 +2,15 @@ export { };
 
 declare global {
 
+    interface IDataUser {
+        email: string;
+        phone: string;
+        fullName: string;
+        role: string;
+        avatar: string;
+        id: string;
+    }
+
     interface IBackendRes<T> {
         error?: string | string[];
         message: string;
@@ -27,13 +36,10 @@ declare global {
 
     interface ILogin {
         access_token: string;
-        user: {
-            email: string;
-            phone: string;
-            fullName: string;
-            role: string;
-            avatar: string;
-            id: string;
-        }
+        user: IDataUser
+    }
+
+    interface IFetchAccount {
+        user: IDataUser
     }
 }

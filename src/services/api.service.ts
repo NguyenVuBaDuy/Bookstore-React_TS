@@ -10,3 +10,8 @@ export const loginAPI = (email: string, password: string, delay: number = 1000) 
     const urlBackend: string = '/api/v1/auth/login'
     return axios.post<IBackendRes<ILogin>>(urlBackend, { username: email, password, delay })
 }
+
+export const fetchAccount = () => {
+    const urlBackend: string = '/api/v1/auth/account'
+    return axios.get<IBackendRes<IFetchAccount>>(urlBackend)
+}

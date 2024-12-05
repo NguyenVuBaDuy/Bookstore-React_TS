@@ -2,6 +2,10 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import AppLayout from 'components/layout/app.layout'
 import RegisterPage from 'pages/register/register.page'
 import LoginPage from 'pages/login/login.page'
+import { fetchAccount } from 'services/api.service'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { doGetAccountAction } from 'redux/account/accountSlice'
 
 const router = createBrowserRouter([
   {
@@ -38,6 +42,20 @@ const router = createBrowserRouter([
 
 
 const App = () => {
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    getAccount()
+  }, [])
+
+  const getAccount = async () => {
+    const res = await fetchAccount();
+    if (res.data) {
+      dispatch(doGetAccountAction(res.data.user))
+    }
+  }
+
   return (
     <RouterProvider router={router} />
   )
