@@ -15,3 +15,8 @@ export const fetchAccount = () => {
     const urlBackend: string = '/api/v1/auth/account'
     return axios.get<IBackendRes<IFetchAccount>>(urlBackend)
 }
+
+export const handleRefreshTokenAPI = () => {
+    const urlBackend: string = '/api/v1/auth/refresh';
+    return axios.get<IBackendRes<ILogin>>(urlBackend)
+}
