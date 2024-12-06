@@ -20,3 +20,8 @@ export const handleRefreshTokenAPI = () => {
     const urlBackend: string = '/api/v1/auth/refresh';
     return axios.get<IBackendRes<ILogin>>(urlBackend)
 }
+
+export const logoutAPI = () => {
+    const urlBackend: string = '/api/v1/auth/logout'
+    return axios.post<IBackendRes<string>>(urlBackend)
+}

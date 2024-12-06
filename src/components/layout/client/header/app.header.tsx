@@ -1,11 +1,12 @@
 import { DownOutlined, HomeOutlined, SearchOutlined, SmileOutlined } from "@ant-design/icons"
-import { Avatar, Badge, Divider, Drawer, Dropdown, MenuProps, Space } from "antd"
+import { Avatar, Badge, Divider, Drawer, Dropdown, MenuProps, message, notification, Space } from "antd"
 import { FaReact } from "react-icons/fa"
 import { FiShoppingCart } from "react-icons/fi"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import 'components/layout/client/header/app.header.scss'
 import { useNavigate } from "react-router-dom"
-
+import { logoutAPI } from 'services/api.service'
+import { doLogoutAction } from 'redux/account/accountSlice'
 const AppHeader = () => {
 
     const isAuthenticated = useSelector((state: IRedux) => state.account.isAuthenticated)
@@ -14,6 +15,18 @@ const AppHeader = () => {
     const role = user.role
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const handleLogout = async () => {
+        const res = await logoutAPI()
+        if (res.data) {
+            dispatch(doLogoutAction())
+            message.success('Logout successfully!')
+        } else notification.error({
+            message: "Logout failed!",
+            description: res.message
+        })
+    }
 
     const items: MenuProps['items'] = [
         ...(role === 'ADMIN' ? [{
@@ -32,7 +45,10 @@ const AppHeader = () => {
         {
             key: 'Logout',
             label: (
-                <div>Logout</div>
+                <div
+                    style={{ width: "100%" }}
+                    onClick={() => { handleLogout() }}
+                >Logout</div>
             ),
         },
     ];

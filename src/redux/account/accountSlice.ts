@@ -33,9 +33,14 @@ const accountSlice = createSlice({
             state.isAuthenticated = true
             state.user = action.payload
         },
+        doLogoutAction: (state) => {
+            state.isAuthenticated = false
+            state.user = initialState.user
+            localStorage.removeItem('access_token')
+        }
     },
 });
 
-export const { doLoginAction, doGetAccountAction } = accountSlice.actions;
+export const { doLoginAction, doGetAccountAction, doLogoutAction } = accountSlice.actions;
 
 export default accountSlice.reducer;
