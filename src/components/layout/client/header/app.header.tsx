@@ -32,7 +32,10 @@ const AppHeader = () => {
         ...(role === 'ADMIN' ? [{
             key: 'admin-dashboard',
             label: (
-                <div>Admin dashboard</div>
+                <div
+                    style={{ width: "100%" }}
+                    onClick={() => { navigate('/admin') }}
+                >Admin dashboard</div>
             )
         }] : [])
         ,
