@@ -1,11 +1,14 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import AppLayout from 'components/layout/app.layout'
+import AppLayout from '@/components/layout/client/app.layout'
 import RegisterPage from 'pages/register/register.page'
 import LoginPage from 'pages/login/login.page'
 import { fetchAccount } from 'services/api.service'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { doGetAccountAction } from 'redux/account/accountSlice'
+import Loading from 'components/loading/loading'
+import LayoutAdmin from 'components/layout/admin/layout.admin'
+import ProtectedRoute from 'components/auth/protected.route'
 
 const router = createBrowserRouter([
   {
@@ -22,11 +25,61 @@ const router = createBrowserRouter([
       },
       {
         path: 'order',
-        element: <div>order page</div>
+        element: (
+          <ProtectedRoute>
+            <div>order page</div>
+          </ProtectedRoute>
+        )
       },
       {
         path: 'history',
-        element: <div>history page</div>
+        element: (
+          <ProtectedRoute>
+            <div>history page</div>
+          </ProtectedRoute>
+        )
+      }
+    ]
+  },
+  {
+    path: "/admin",
+    element: (
+      <ProtectedRoute>
+        <LayoutAdmin />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: (
+          <ProtectedRoute>
+            <div>dashboard</div>
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: '/admin/user',
+        element: (
+          <ProtectedRoute>
+            <div>user page</div>
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: '/admin/order',
+        element: (
+          <ProtectedRoute>
+            <div>order page</div>
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: '/admin/book',
+        element: (
+          <ProtectedRoute>
+            <div>book page</div>
+          </ProtectedRoute>
+        )
       }
     ]
   },
@@ -45,19 +98,31 @@ const App = () => {
 
   const dispatch = useDispatch()
 
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   useEffect(() => {
     getAccount()
   }, [])
 
   const getAccount = async () => {
+    setIsLoading(true)
     const res = await fetchAccount();
     if (res.data) {
       dispatch(doGetAccountAction(res.data.user))
     }
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1000)
   }
 
   return (
-    <RouterProvider router={router} />
+    <>
+      {isLoading === false ?
+        <RouterProvider router={router} />
+        :
+        <Loading />
+      }
+    </>
   )
 }
 
