@@ -2,13 +2,7 @@ import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Button, Result } from "antd";
 import { useSelector } from "react-redux"
 
-interface IRedux {
-    account: {
-        isAuthenticated: boolean;
-        isLoadingApp: boolean;
-        user: IDataUser;
-    }
-}
+
 
 interface IProps {
     children: React.ReactNode;

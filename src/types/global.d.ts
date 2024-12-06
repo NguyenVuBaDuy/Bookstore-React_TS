@@ -2,6 +2,14 @@ export { };
 
 declare global {
 
+    interface IRedux {
+        account: {
+            isAuthenticated: boolean;
+            isLoadingApp: boolean;
+            user: IDataUser;
+        }
+    }
+
     interface IDataUser {
         email: string;
         phone: string;
