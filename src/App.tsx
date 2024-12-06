@@ -9,6 +9,11 @@ import { doGetAccountAction } from 'redux/account/accountSlice'
 import Loading from 'components/loading/loading'
 import LayoutAdmin from 'components/layout/admin/layout.admin'
 import ProtectedRoute from 'components/auth/protected.route'
+import ManageUser from 'pages/admin/user/manage.user'
+import { ConfigProvider } from 'antd'
+import enUS from 'antd/locale/en_US';
+
+
 
 const router = createBrowserRouter([
   {
@@ -61,7 +66,7 @@ const router = createBrowserRouter([
         path: '/admin/user',
         element: (
           <ProtectedRoute>
-            <div>user page</div>
+            <ManageUser />
           </ProtectedRoute>
         )
       },
@@ -105,6 +110,11 @@ const App = () => {
   }, [])
 
   const getAccount = async () => {
+
+    if (window.location.pathname === '/login'
+      || window.location.pathname === '/register'
+    ) return
+
     setIsLoading(true)
     const res = await fetchAccount();
     if (res.data) {
@@ -118,7 +128,9 @@ const App = () => {
   return (
     <>
       {isLoading === false ?
-        <RouterProvider router={router} />
+        <ConfigProvider locale={enUS}>
+          <RouterProvider router={router} />
+        </ConfigProvider>
         :
         <Loading />
       }
