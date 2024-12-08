@@ -6,6 +6,7 @@ import { ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
 import { useRef, useState } from 'react';
 import ViewUserDetail from 'components/admin/user/view.user.detail';
+import CreateUser from './create.user';
 
 type TSearch = {
     fullName: string;
@@ -20,6 +21,8 @@ const UserTable = () => {
 
     const [isOpenUserDetail, setIsOpenUserDetail] = useState<boolean>(false)
     const [dataUserDetail, setDataUserDetail] = useState<IUserTable | null>(null)
+
+    const [isOpenModalCreateUser, setIsOpenModalCreateUser] = useState<boolean>(false)
 
     const [meta, setMeta] = useState({
         current: 1,
@@ -147,7 +150,7 @@ const UserTable = () => {
                         key="button"
                         icon={<PlusOutlined />}
                         onClick={() => {
-                            actionRef.current?.reload();
+                            setIsOpenModalCreateUser(true)
                         }}
                         type="primary"
                     >
@@ -160,6 +163,12 @@ const UserTable = () => {
                 setIsOpenUserDetail={setIsOpenUserDetail}
                 dataUserDetail={dataUserDetail}
                 setDataUserDetail={setDataUserDetail}
+            />
+
+            <CreateUser
+                isOpenModalCreateUser={isOpenModalCreateUser}
+                setIsOpenModalCreateUser={setIsOpenModalCreateUser}
+                actionRef={actionRef}
             />
         </>
     )
