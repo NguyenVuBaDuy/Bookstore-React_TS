@@ -26,7 +26,7 @@ export const logoutAPI = () => {
     return axios.post<IBackendRes<string>>(urlBackend)
 }
 
-export const getUserAPI = (current: number, pageSize: number) => {
-    const urlBackend: string = `/api/v1/user?current=${current}&pageSize=${pageSize}`
+export const getUserAPI = (current: number, pageSize: number, query: string) => {
+    const urlBackend: string = `/api/v1/user?current=${current}&pageSize=${pageSize}${query}`
     return axios.get<IBackendRes<IModelPaginate<IUserTable>>>(urlBackend)
 }

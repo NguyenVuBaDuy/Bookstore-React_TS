@@ -6,13 +6,22 @@ import { ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
 import { useRef, useState } from 'react';
 
+type TSearch = {
+    fullName: string;
+    email: string;
+    createdAt: string;
+    createdAtRange: [string, string];
+}
 
 const columns: ProColumns<IUserTable>[] = [
     {
+        title: "No.",
         key: "no.",
-        dataIndex: 'index',
         valueType: 'indexBorder',
         width: 48,
+        // render: (text, record, index, action) => [
+        //     <a href="#">index</a>
+        // ]
     },
 
     {
@@ -22,12 +31,11 @@ const columns: ProColumns<IUserTable>[] = [
         render: (text, record, _, action) => [
             <a href='#'>{record._id}</a>
         ],
-        search: false,
-
+        hideInSearch: true
     },
     {
         key: "fullName",
-        title: 'Full name',
+        title: 'Full Name',
         dataIndex: 'fullName',
     },
     {
@@ -38,14 +46,23 @@ const columns: ProColumns<IUserTable>[] = [
     },
     {
         key: "phone",
-        title: 'Phone number',
+        title: 'Phone Number',
         dataIndex: 'phone',
-        search: false
+        hideInSearch: true
     },
     {
         key: "createdAt",
-        title: 'Created at',
-        dataIndex: 'createdAt'
+        title: 'Created At',
+        dataIndex: 'createdAt',
+        valueType: 'date',
+        hideInSearch: true,
+        sorter: true
+    },
+    {
+        title: 'Created At',
+        dataIndex: 'createdAtRange',
+        valueType: 'dateRange',
+        hideInTable: true
     },
     {
         key: "action",
@@ -77,12 +94,30 @@ const UserTable = () => {
 
 
     return (
-        <ProTable<IUserTable>
+        <ProTable<IUserTable, TSearch>
             columns={columns}
             actionRef={actionRef}
             cardBordered
-            request={async (params, sort, filter) => {
-                const res = await getUserAPI(params?.current ?? 1, params?.pageSize ?? 5)
+            request={async (params, sorter) => {
+                let query = ''
+                if (params.fullName) {
+                    query += `&fullName=/${params.fullName}/i`
+                }
+                if (params.email) {
+                    query += `&email=/${params.email}/i`
+                }
+
+                if (params.createdAtRange && params.createdAtRange.length) {
+                    query += `&createdAt>=${params.createdAtRange[0]}&createdAt<=${params.createdAtRange[1]}`
+                }
+
+                if (sorter && sorter.createdAt) {
+                    query += `&sort=${sorter.createdAt === 'ascend' ? 'createdAt' : '-createdAt'}`
+                }
+
+                console.log(query)
+
+                const res = await getUserAPI(params?.current ?? 1, params?.pageSize ?? 5, query)
                 if (res.data) {
                     setMeta(res.data.meta)
                 }
@@ -113,6 +148,7 @@ const UserTable = () => {
                     Add new
                 </Button>,
             ]}
+
         />
     )
 }
