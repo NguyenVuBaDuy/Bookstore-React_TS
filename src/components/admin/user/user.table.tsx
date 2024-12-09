@@ -8,6 +8,7 @@ import { useRef, useState } from 'react';
 import ViewUserDetail from 'components/admin/user/view.user.detail';
 import CreateUser from './create.user';
 import ImportUser from './data i-o/import.user';
+import * as XLSX from 'xlsx'
 
 type TSearch = {
     fullName: string;
@@ -26,6 +27,8 @@ const UserTable = () => {
     const [isOpenModalCreateUser, setIsOpenModalCreateUser] = useState<boolean>(false)
 
     const [isOpenModalImportUser, setIsOpenModalImportUser] = useState<boolean>(false)
+
+    const [dataUsers, setDataUsers] = useState<IUserTable[]>([])
 
     const [meta, setMeta] = useState({
         current: 1,
@@ -105,6 +108,14 @@ const UserTable = () => {
         },
     ];
 
+    const handleExport = () => {
+        if (dataUsers && dataUsers.length > 0) {
+            const worksheet = XLSX.utils.json_to_sheet(dataUsers);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+            XLSX.writeFile(workbook, "DataUsers.xlsx");
+        }
+    }
 
     return (
         <>
@@ -132,6 +143,7 @@ const UserTable = () => {
                     const res = await getUserAPI(params?.current ?? 1, params?.pageSize ?? 5, query)
                     if (res.data) {
                         setMeta(res.data.meta)
+                        setDataUsers(res.data.result)
                     }
                     return {
                         data: res.data?.result,
@@ -154,7 +166,7 @@ const UserTable = () => {
                         key="button"
                         icon={<ExportOutlined />}
                         onClick={() => {
-
+                            handleExport()
                         }}
                         type="primary"
                     >
