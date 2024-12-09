@@ -35,3 +35,8 @@ export const createUserAPI = (fullName: string, email: string, password: string,
     const urlBackend: string = '/api/v1/user'
     return axios.post<IBackendRes<IUserTable>>(urlBackend, { fullName, email, password, phone })
 }
+
+export const importUserAPI = (values: { fullName: string; email: string; phone: string; password: string; }[]) => {
+    const urlBackend = '/api/v1/user/bulk-create'
+    return axios.post<IBackendRes<IImportUser>>(urlBackend, values)
+}

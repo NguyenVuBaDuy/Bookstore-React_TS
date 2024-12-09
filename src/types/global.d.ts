@@ -62,4 +62,9 @@ declare global {
         createdAt: Date;
         updatedAt: Date;
     }
+
+    interface IImportUser {
+        countSuccess: number;
+        countError: number;
+    }
 }

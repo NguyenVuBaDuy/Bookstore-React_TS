@@ -1,12 +1,13 @@
 
 import { getUserAPI } from '@/services/api.service';
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, ExportOutlined, ImportOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
 import { useRef, useState } from 'react';
 import ViewUserDetail from 'components/admin/user/view.user.detail';
 import CreateUser from './create.user';
+import ImportUser from './data i-o/import.user';
 
 type TSearch = {
     fullName: string;
@@ -23,6 +24,8 @@ const UserTable = () => {
     const [dataUserDetail, setDataUserDetail] = useState<IUserTable | null>(null)
 
     const [isOpenModalCreateUser, setIsOpenModalCreateUser] = useState<boolean>(false)
+
+    const [isOpenModalImportUser, setIsOpenModalImportUser] = useState<boolean>(false)
 
     const [meta, setMeta] = useState({
         current: 1,
@@ -146,6 +149,27 @@ const UserTable = () => {
                 }}
                 headerTitle="Table user"
                 toolBarRender={() => [
+
+                    <Button
+                        key="button"
+                        icon={<ExportOutlined />}
+                        onClick={() => {
+
+                        }}
+                        type="primary"
+                    >
+                        Export
+                    </Button>,
+                    <Button
+                        key="button"
+                        icon={<ImportOutlined />}
+                        onClick={() => {
+                            setIsOpenModalImportUser(true)
+                        }}
+                        type="primary"
+                    >
+                        Import
+                    </Button>,
                     <Button
                         key="button"
                         icon={<PlusOutlined />}
@@ -168,6 +192,12 @@ const UserTable = () => {
             <CreateUser
                 isOpenModalCreateUser={isOpenModalCreateUser}
                 setIsOpenModalCreateUser={setIsOpenModalCreateUser}
+                actionRef={actionRef}
+            />
+
+            <ImportUser
+                isOpenModalImportUser={isOpenModalImportUser}
+                setIsOpenModalImportUser={setIsOpenModalImportUser}
                 actionRef={actionRef}
             />
         </>
