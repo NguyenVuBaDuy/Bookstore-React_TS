@@ -49,4 +49,14 @@ export const updateUserAPI = (_id: string, fullName: string, phone: string) => {
 export const deleteUserAPI = (_id: string) => {
     const urlBackend = `/api/v1/user/${_id}`
     return axios.delete<IBackendRes<any>>(urlBackend)
-} 
+}
+
+export const getBookAPI = (current: number, pageSize: number, query: string) => {
+    const urlBackend = `/api/v1/book?current=${current}&pageSize=${pageSize}${query}`
+    return axios.get<IBackendRes<IModelPaginate<IBookTable>>>(urlBackend)
+}
+
+export const getCategoryAPI = () => {
+    const urlBackend = '/api/v1/database/category'
+    return axios.get<IBackendRes<TCategory>>(urlBackend)
+}

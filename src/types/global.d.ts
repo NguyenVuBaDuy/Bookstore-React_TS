@@ -81,4 +81,6 @@ declare global {
         createdAt: Date;
         updatedAt: Date;
     }
+
+    type TCategory = string[]
 }

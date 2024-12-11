@@ -1,20 +1,44 @@
 
+import { getBookAPI, getCategoryAPI } from '@/services/api.service';
 import { DeleteOutlined, EditOutlined, ExportOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
 import { Button, Popconfirm } from 'antd';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type TSearch = {
-    fullName: string;
-    email: string;
-    createdAt: string;
-    createdAtRange: [string, string];
+    mainText: string;
+    category: string;
+    author: string;
 }
 
-const UserTable = () => {
+
+const BookTable = () => {
+
     const actionRef = useRef<ActionType>()
 
+    const [category, setCategory] = useState<any>([])
+
+    const [meta, setMeta] = useState({
+        current: 1,
+        pageSize: 5,
+        pages: 0,
+        total: 0
+    })
+
+    useEffect(() => {
+        const getCategory = async () => {
+            const res = await getCategoryAPI()
+            if (res.data) {
+                const categoryEnum = res.data.reduce((acc: any, cur: any) => {
+                    acc[cur] = cur;
+                    return acc
+                }, {})
+                setCategory(categoryEnum)
+            }
+        }
+        getCategory()
+    }, [])
 
     const columns: ProColumns<IBookTable>[] = [
         {
@@ -28,6 +52,9 @@ const UserTable = () => {
             title: 'Id',
             dataIndex: '_id',
             hideInSearch: true,
+            render: (_, record) => (
+                <a href="#" >{record._id}</a>
+            )
         },
         {
             key: "mainText",
@@ -39,6 +66,7 @@ const UserTable = () => {
             title: 'Category',
             dataIndex: 'category',
             valueType: 'select',
+            valueEnum: category
         },
         {
             key: "author",
@@ -49,14 +77,19 @@ const UserTable = () => {
             key: "price",
             title: "Price",
             dataIndex: "price",
-            hideInSearch: true
+            render: (_, record) => (
+                <>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(record.price)}</>
+            ),
+            hideInSearch: true,
+            sorter: true
         },
         {
             key: "updatedAt",
             title: "Lasted Updated",
             dataIndex: "updatedAt",
             valueType: "date",
-            hideInSearch: true
+            hideInSearch: true,
+            sorter: true
         },
         {
             key: "action",
@@ -69,15 +102,14 @@ const UserTable = () => {
                     }}>
                         <EditOutlined
                             style={{ cursor: 'pointer', color: "orange" }}
-                            key="editable"
                             onClick={() => {
-                                action?.startEditable?.(record._id)
+
                             }}
                         />
                         <Popconfirm
                             title="Delete the task"
                             description="Are you sure to delete this task?"
-                            onConfirm={() => { handleDelete(record._id) }}
+                            onConfirm={() => { }}
                             onCancel={() => { }}
                             okText="Yes"
                             cancelText="No"
@@ -95,23 +127,52 @@ const UserTable = () => {
     return (
 
         <>
-            <ProTable<IUserTable, TSearch>
+            <ProTable<IBookTable, TSearch>
                 columns={columns}
                 actionRef={actionRef}
                 cardBordered
                 request={async (params, sorter) => {
+
+                    let query = ''
+
+                    if (params?.mainText) {
+                        query += `&mainText=/${params.mainText}/i`
+                    }
+
+                    if (params?.author) {
+                        query += `&author=/${params.author}/i`
+                    }
+
+                    if (params?.category) {
+                        query += `&category=/${params.category}/i`
+                    }
+
+                    if (sorter) {
+                        const key = Object.keys(sorter)
+                        const value: any = key.length > 0 ? sorter[key[0]] : ''
+                        if (key && key.length > 0) {
+                            query += `&sort=${value === 'ascend' ? `${key[0]}` : `-${key[0]}`}`
+                        }
+                    }
+
+                    const res = await getBookAPI(params?.current ?? 1, params?.pageSize ?? 5, query)
+
+                    if (res.data) {
+                        setMeta(res.data.meta)
+                    }
+
                     return {
-                        data: [],
+                        data: res.data?.result,
                         page: 1,
                         success: true,
-                        total: 10
+                        total: res.data?.meta.total
                     }
                 }}
                 rowKey="_id"
                 pagination={{
-                    current: 1,
-                    pageSize: 10,
-                    total: 10,
+                    current: meta.current,
+                    pageSize: meta.pageSize,
+                    total: meta.total,
                     showSizeChanger: true
                 }}
                 headerTitle="Table book"
@@ -121,7 +182,7 @@ const UserTable = () => {
                         key="button"
                         icon={<ExportOutlined />}
                         onClick={() => {
-                            handleExport()
+
                         }}
                         type="primary"
                     >
@@ -131,7 +192,7 @@ const UserTable = () => {
                         key="button"
                         icon={<PlusOutlined />}
                         onClick={() => {
-                            setIsOpenModalCreateUser(true)
+
                         }}
                         type="primary"
                     >
@@ -143,4 +204,4 @@ const UserTable = () => {
     )
 }
 
-export default UserTable
+export default BookTable
