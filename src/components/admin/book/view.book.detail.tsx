@@ -106,7 +106,7 @@ const ViewBookDetail = (props: IProps) => {
                             label="Price"
                             span={2}
                         >
-                            {dataBookDetail?.price}
+                            <>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(dataBookDetail.price)}</>
                         </Descriptions.Item>
 
 

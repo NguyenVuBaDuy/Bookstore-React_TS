@@ -60,3 +60,22 @@ export const getCategoryAPI = () => {
     const urlBackend = '/api/v1/database/category'
     return axios.get<IBackendRes<TCategory>>(urlBackend)
 }
+
+export const handleUploadFile = (fileImg: any, type: string) => {
+    const bodyFormData = new FormData();
+    bodyFormData.append('fileImg', fileImg);
+    return axios({
+        method: 'post',
+        url: '/api/v1/file/upload',
+        data: bodyFormData,
+        headers: {
+            "Content-Type": "multipart/form-data",
+            "upload-type": type
+        },
+    });
+}
+
+export const createBookAPI = (thumbnail: string, slider: string[], mainText: string, author: string, price: number, quantity: number, category: string) => {
+    const urlBackend = '/api/v1/book'
+    return axios.post<IBackendRes<IBookTable>>(urlBackend, { thumbnail, slider, mainText, author, price, quantity, category, sold: 0 })
+}

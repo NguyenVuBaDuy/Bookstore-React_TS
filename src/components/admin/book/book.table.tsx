@@ -6,10 +6,11 @@ import { ProTable } from '@ant-design/pro-components';
 import { Button, Popconfirm } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import ViewBookDetail from 'components/admin/book/view.book.detail';
+import CreateBook from 'components/admin/book/create.book';
 
 type TSearch = {
     mainText: string;
-    category: string;
+    category: string[];
     author: string;
 }
 
@@ -26,6 +27,8 @@ const BookTable = () => {
     })
     const [isOpenBookDetail, setIsOpenBookDetail] = useState<boolean>(false)
     const [dataBookDetail, setDataBookDetail] = useState<IBookTable | null>(null)
+
+    const [isOpenModalCreateBook, setIsOpenModalCreateBook] = useState<boolean>(false)
 
     useEffect(() => {
         const getCategory = async () => {
@@ -93,7 +96,7 @@ const BookTable = () => {
             dataIndex: "updatedAt",
             valueType: "date",
             hideInSearch: true,
-            sorter: true
+            sorter: true,
         },
         {
             key: "action",
@@ -196,7 +199,7 @@ const BookTable = () => {
                         key="button"
                         icon={<PlusOutlined />}
                         onClick={() => {
-
+                            setIsOpenModalCreateBook(true)
                         }}
                         type="primary"
                     >
@@ -210,6 +213,13 @@ const BookTable = () => {
                 setIsOpenBookDetail={setIsOpenBookDetail}
                 dataBookDetail={dataBookDetail}
                 setDataBookDetail={setDataBookDetail}
+            />
+
+            <CreateBook
+                setIsOpenModalCreateBook={setIsOpenModalCreateBook}
+                isOpenModalCreateBook={isOpenModalCreateBook}
+                category={category}
+                actionRef={actionRef}
             />
         </>
     )
