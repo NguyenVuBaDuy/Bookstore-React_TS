@@ -1,9 +1,9 @@
 
-import { getUserAPI, updateUserAPI } from '@/services/api.service';
+import { deleteUserAPI, getUserAPI, updateUserAPI } from '@/services/api.service';
 import { CloseOutlined, DeleteOutlined, EditOutlined, ExportOutlined, ImportOutlined, PlusOutlined, SaveOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns, ProCoreActionType } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
-import { Button, message, notification } from 'antd';
+import { Button, message, notification, Popconfirm } from 'antd';
 import { useRef, useState } from 'react';
 import ViewUserDetail from 'components/admin/user/view.user.detail';
 import CreateUser from './create.user';
@@ -44,20 +44,6 @@ const UserTable = () => {
         pages: 0,
         total: 0
     })
-
-    const handleSave = async () => {
-        if (dataUpdate) {
-            const { _id, fullName, phone } = dataUpdate
-            const res = await updateUserAPI(_id, fullName, phone)
-            if (res.data) {
-                message.success("Update User Successfully")
-                actionRef.current?.reload()
-                setEditableKeys([])
-            } else {
-                notification.success({ message: "Update User Failed", description: res.message })
-            }
-        }
-    }
 
     const columns: ProColumns<IUserTable>[] = [
         {
@@ -152,7 +138,16 @@ const UserTable = () => {
                                         action?.startEditable?.(record._id)
                                     }}
                                 />
-                                <DeleteOutlined style={{ cursor: 'pointer', color: "red" }} />
+                                <Popconfirm
+                                    title="Delete the task"
+                                    description="Are you sure to delete this task?"
+                                    onConfirm={() => { handleDelete(record._id) }}
+                                    onCancel={() => { }}
+                                    okText="Yes"
+                                    cancelText="No"
+                                >
+                                    <DeleteOutlined style={{ cursor: 'pointer', color: "red" }} />
+                                </Popconfirm>
                             </div>
                         }
                     </>
@@ -172,6 +167,32 @@ const UserTable = () => {
         }
     }
 
+
+    const handleSave = async () => {
+        if (dataUpdate) {
+            const { _id, fullName, phone } = dataUpdate
+            const res = await updateUserAPI(_id, fullName, phone)
+            if (res.data) {
+                message.success("Update User Successfully")
+                actionRef.current?.reload()
+                setEditableKeys([])
+            } else {
+                notification.success({ message: "Update User Failed", description: res.message })
+            }
+        }
+    }
+
+    const handleDelete = async (_id: string) => {
+        if (_id) {
+            const res = await deleteUserAPI(_id)
+            if (res.data) {
+                message.success("Delete User Successfully")
+                actionRef.current?.reload()
+            } else {
+                notification.error({ message: "Delete User Failed!", description: res.message })
+            }
+        }
+    }
 
     return (
 
