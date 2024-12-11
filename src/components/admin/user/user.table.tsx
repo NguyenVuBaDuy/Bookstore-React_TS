@@ -1,9 +1,9 @@
 
-import { getUserAPI } from '@/services/api.service';
-import { DeleteOutlined, EditOutlined, ExportOutlined, ImportOutlined, PlusOutlined } from '@ant-design/icons';
-import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import { getUserAPI, updateUserAPI } from '@/services/api.service';
+import { CloseOutlined, DeleteOutlined, EditOutlined, ExportOutlined, ImportOutlined, PlusOutlined, SaveOutlined } from '@ant-design/icons';
+import type { ActionType, ProColumns, ProCoreActionType } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
-import { Button } from 'antd';
+import { Button, message, notification } from 'antd';
 import { useRef, useState } from 'react';
 import ViewUserDetail from 'components/admin/user/view.user.detail';
 import CreateUser from './create.user';
@@ -17,6 +17,11 @@ type TSearch = {
     createdAtRange: [string, string];
 }
 
+interface IDataUpdate {
+    _id: string;
+    fullName: string;
+    phone: string;
+}
 
 const UserTable = () => {
     const actionRef = useRef<ActionType>()
@@ -30,6 +35,9 @@ const UserTable = () => {
 
     const [dataUsers, setDataUsers] = useState<IUserTable[]>([])
 
+    const [editableKeys, setEditableKeys] = useState<React.Key[]>([]);
+    const [dataUpdate, setDataUpdate] = useState<IDataUpdate>()
+
     const [meta, setMeta] = useState({
         current: 1,
         pageSize: 5,
@@ -37,15 +45,26 @@ const UserTable = () => {
         total: 0
     })
 
+    const handleSave = async () => {
+        if (dataUpdate) {
+            const { _id, fullName, phone } = dataUpdate
+            const res = await updateUserAPI(_id, fullName, phone)
+            if (res.data) {
+                message.success("Update User Successfully")
+                actionRef.current?.reload()
+                setEditableKeys([])
+            } else {
+                notification.success({ message: "Update User Failed", description: res.message })
+            }
+        }
+    }
+
     const columns: ProColumns<IUserTable>[] = [
         {
             title: "No.",
             key: "no.",
             valueType: 'indexBorder',
             width: 48,
-            // render: (text, record, index, action) => [
-            //     <a href="#">index</a>
-            // ]
         },
 
         {
@@ -58,7 +77,8 @@ const UserTable = () => {
                     setDataUserDetail(record)
                 }}>{record._id}</a>
             ],
-            hideInSearch: true
+            hideInSearch: true,
+            editable: false
         },
         {
             key: "fullName",
@@ -66,16 +86,17 @@ const UserTable = () => {
             dataIndex: 'fullName',
         },
         {
-            key: "email",
-            title: 'Email',
-            dataIndex: 'email',
-            copyable: true
-        },
-        {
             key: "phone",
             title: 'Phone Number',
             dataIndex: 'phone',
-            hideInSearch: true
+            hideInSearch: true,
+        },
+        {
+            key: "email",
+            title: 'Email',
+            dataIndex: 'email',
+            copyable: true,
+            editable: false
         },
         {
             key: "createdAt",
@@ -83,28 +104,62 @@ const UserTable = () => {
             dataIndex: 'createdAt',
             valueType: 'date',
             hideInSearch: true,
-            sorter: true
+            sorter: true,
+            editable: false
         },
         {
             title: 'Created At',
             dataIndex: 'createdAtRange',
             valueType: 'dateRange',
-            hideInTable: true
+            hideInTable: true,
+            editable: false
         },
         {
             key: "action",
             title: 'Action',
-            render: (text, record, _, action) => [
-                <div style={{
-                    display: "flex",
-                    gap: "15px"
-                }}>
-                    <EditOutlined style={{ cursor: 'pointer', color: "orange" }} />
-                    <DeleteOutlined style={{ cursor: 'pointer', color: "red" }} />
-                </div>
-            ],
-            search: false
+            render: (text, record, _, action) => {
+                const isEdit: boolean = record._id === editableKeys[0]
 
+                return (
+                    <>
+                        {isEdit ?
+                            <div style={{
+                                display: "flex",
+                                gap: "15px"
+                            }}>
+                                <SaveOutlined
+                                    style={{ cursor: 'pointer', color: "blue" }}
+                                    onClick={async () => {
+                                        handleSave()
+                                    }}
+                                />
+                                <CloseOutlined
+                                    style={{ cursor: 'pointer', color: "red" }}
+                                    onClick={() => {
+                                        setEditableKeys([])
+                                    }}
+                                />
+                            </div>
+                            :
+                            <div style={{
+                                display: "flex",
+                                gap: "15px"
+                            }}>
+                                <EditOutlined
+                                    style={{ cursor: 'pointer', color: "orange" }}
+                                    key="editable"
+                                    onClick={() => {
+                                        action?.startEditable?.(record._id)
+                                    }}
+                                />
+                                <DeleteOutlined style={{ cursor: 'pointer', color: "red" }} />
+                            </div>
+                        }
+                    </>
+                )
+            },
+            search: false,
+            editable: false
         },
     ];
 
@@ -117,7 +172,9 @@ const UserTable = () => {
         }
     }
 
+
     return (
+
         <>
             <ProTable<IUserTable, TSearch>
                 columns={columns}
@@ -142,6 +199,7 @@ const UserTable = () => {
 
                     const res = await getUserAPI(params?.current ?? 1, params?.pageSize ?? 5, query)
                     if (res.data) {
+                        setEditableKeys([])
                         setMeta(res.data.meta)
                         setDataUsers(res.data.result)
                     }
@@ -193,6 +251,21 @@ const UserTable = () => {
                         Add new
                     </Button>,
                 ]}
+                editable={{
+                    type: 'single',
+                    editableKeys,
+                    onChange: (editableKeys) => {
+                        setEditableKeys(editableKeys)
+                    },
+                    onValuesChange: (values) => {
+                        const data: IDataUpdate = {
+                            _id: values._id,
+                            fullName: values.fullName,
+                            phone: values.phone
+                        }
+                        setDataUpdate(data)
+                    }
+                }}
             />
             <ViewUserDetail
                 isOpenUserDetail={isOpenUserDetail}
