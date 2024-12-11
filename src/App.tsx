@@ -12,6 +12,7 @@ import ProtectedRoute from 'components/auth/protected.route'
 import ManageUser from 'pages/admin/user/manage.user'
 import { ConfigProvider } from 'antd'
 import enUS from 'antd/locale/en_US';
+import ManageBook from 'pages/admin/book/manage.book'
 
 
 
@@ -82,7 +83,7 @@ const router = createBrowserRouter([
         path: '/admin/book',
         element: (
           <ProtectedRoute>
-            <div>book page</div>
+            <ManageBook />
           </ProtectedRoute>
         )
       }
