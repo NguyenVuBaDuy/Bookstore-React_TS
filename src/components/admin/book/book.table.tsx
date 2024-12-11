@@ -5,6 +5,7 @@ import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
 import { Button, Popconfirm } from 'antd';
 import { useEffect, useRef, useState } from 'react';
+import ViewBookDetail from 'components/admin/book/view.book.detail';
 
 type TSearch = {
     mainText: string;
@@ -16,15 +17,15 @@ type TSearch = {
 const BookTable = () => {
 
     const actionRef = useRef<ActionType>()
-
     const [category, setCategory] = useState<any>([])
-
     const [meta, setMeta] = useState({
         current: 1,
         pageSize: 5,
         pages: 0,
         total: 0
     })
+    const [isOpenBookDetail, setIsOpenBookDetail] = useState<boolean>(false)
+    const [dataBookDetail, setDataBookDetail] = useState<IBookTable | null>(null)
 
     useEffect(() => {
         const getCategory = async () => {
@@ -53,7 +54,10 @@ const BookTable = () => {
             dataIndex: '_id',
             hideInSearch: true,
             render: (_, record) => (
-                <a href="#" >{record._id}</a>
+                <a href="#" onClick={() => {
+                    setIsOpenBookDetail(true)
+                    setDataBookDetail(record)
+                }}>{record._id}</a>
             )
         },
         {
@@ -199,6 +203,13 @@ const BookTable = () => {
                         Add new
                     </Button>,
                 ]}
+            />
+
+            <ViewBookDetail
+                isOpenBookDetail={isOpenBookDetail}
+                setIsOpenBookDetail={setIsOpenBookDetail}
+                dataBookDetail={dataBookDetail}
+                setDataBookDetail={setDataBookDetail}
             />
         </>
     )

@@ -1,13 +1,13 @@
 
 import { deleteUserAPI, getUserAPI, updateUserAPI } from '@/services/api.service';
 import { CloseOutlined, DeleteOutlined, EditOutlined, ExportOutlined, ImportOutlined, PlusOutlined, SaveOutlined } from '@ant-design/icons';
-import type { ActionType, ProColumns, ProCoreActionType } from '@ant-design/pro-components';
+import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
 import { Button, message, notification, Popconfirm } from 'antd';
 import { useRef, useState } from 'react';
 import ViewUserDetail from 'components/admin/user/view.user.detail';
-import CreateUser from './create.user';
-import ImportUser from './data i-o/import.user';
+import CreateUser from 'components/admin/user/create.user';
+import ImportUser from 'components/admin/user/data i-o/import.user';
 import * as XLSX from 'xlsx'
 
 type TSearch = {
