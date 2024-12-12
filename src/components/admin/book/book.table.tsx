@@ -1,9 +1,9 @@
 
-import { getBookAPI, getCategoryAPI } from '@/services/api.service';
+import { deleteBookAPI, getBookAPI, getCategoryAPI } from '@/services/api.service';
 import { DeleteOutlined, EditOutlined, ExportOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
-import { Button, Popconfirm, TablePaginationConfig } from 'antd';
+import { Button, message, notification, Popconfirm, TablePaginationConfig } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import ViewBookDetail from 'components/admin/book/view.book.detail';
 import CreateBook from 'components/admin/book/create.book';
@@ -125,7 +125,7 @@ const BookTable = () => {
                         <Popconfirm
                             title="Delete the task"
                             description="Are you sure to delete this task?"
-                            onConfirm={() => { }}
+                            onConfirm={() => { handleDeleteBook(record._id) }}
                             onCancel={() => { }}
                             okText="Yes"
                             cancelText="No"
@@ -149,6 +149,16 @@ const BookTable = () => {
         }
         console.log(sort)
         setSortQuery(sort)
+    }
+
+    const handleDeleteBook = async (_id: string) => {
+        const res = await deleteBookAPI(_id)
+        if (res.data) {
+            message.success("Delete Book Successfully")
+            actionRef.current?.reload()
+        } else {
+            notification.error({ message: "Delete Book Failed", description: res.message })
+        }
     }
 
     return (
