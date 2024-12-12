@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import ViewBookDetail from 'components/admin/book/view.book.detail';
 import CreateBook from 'components/admin/book/create.book';
 import { FilterValue, SorterResult } from 'antd/es/table/interface';
+import UpdateBook from './update.book';
 
 type TSearch = {
     mainText: string;
@@ -31,6 +32,9 @@ const BookTable = () => {
 
     const [isOpenModalCreateBook, setIsOpenModalCreateBook] = useState<boolean>(false)
     const [sortQuery, setSortQuery] = useState<string>('&sort=-updatedAt')
+
+    const [isOpenModalUpdateBook, setIsOpenModalUpdateBook] = useState<boolean>(false)
+    const [dataUpdateBook, setDataUpdateBook] = useState<IBookTable | null>(null)
 
     useEffect(() => {
         const getCategory = async () => {
@@ -114,7 +118,8 @@ const BookTable = () => {
                         <EditOutlined
                             style={{ cursor: 'pointer', color: "orange" }}
                             onClick={() => {
-
+                                setIsOpenModalUpdateBook(true)
+                                setDataUpdateBook(record)
                             }}
                         />
                         <Popconfirm
@@ -153,7 +158,7 @@ const BookTable = () => {
                 columns={columns}
                 actionRef={actionRef}
                 cardBordered
-                request={async (params, sorter) => {
+                request={async (params) => {
 
 
                     let query = ''
@@ -231,6 +236,15 @@ const BookTable = () => {
             <CreateBook
                 setIsOpenModalCreateBook={setIsOpenModalCreateBook}
                 isOpenModalCreateBook={isOpenModalCreateBook}
+                category={category}
+                actionRef={actionRef}
+            />
+
+            <UpdateBook
+                setDataUpdateBook={setDataUpdateBook}
+                dataUpdateBook={dataUpdateBook}
+                setIsOpenModalUpdateBook={setIsOpenModalUpdateBook}
+                isOpenModalUpdateBook={isOpenModalUpdateBook}
                 category={category}
                 actionRef={actionRef}
             />
