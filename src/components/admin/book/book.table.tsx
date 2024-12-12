@@ -3,10 +3,11 @@ import { getBookAPI, getCategoryAPI } from '@/services/api.service';
 import { DeleteOutlined, EditOutlined, ExportOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
-import { Button, Popconfirm } from 'antd';
+import { Button, Popconfirm, TablePaginationConfig } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import ViewBookDetail from 'components/admin/book/view.book.detail';
 import CreateBook from 'components/admin/book/create.book';
+import { FilterValue, SorterResult } from 'antd/es/table/interface';
 
 type TSearch = {
     mainText: string;
@@ -29,6 +30,7 @@ const BookTable = () => {
     const [dataBookDetail, setDataBookDetail] = useState<IBookTable | null>(null)
 
     const [isOpenModalCreateBook, setIsOpenModalCreateBook] = useState<boolean>(false)
+    const [sortQuery, setSortQuery] = useState<string>('&sort=-updatedAt')
 
     useEffect(() => {
         const getCategory = async () => {
@@ -88,7 +90,8 @@ const BookTable = () => {
                 <>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(record.price)}</>
             ),
             hideInSearch: true,
-            sorter: true
+            sorter: true,
+            sortOrder: sortQuery?.includes('price') ? (sortQuery.includes('-') ? 'descend' : 'ascend') : null,
         },
         {
             key: "updatedAt",
@@ -97,6 +100,7 @@ const BookTable = () => {
             valueType: "date",
             hideInSearch: true,
             sorter: true,
+            sortOrder: sortQuery?.includes('updatedAt') ? (sortQuery.includes('-') ? 'descend' : 'ascend') : null,
         },
         {
             key: "action",
@@ -130,6 +134,17 @@ const BookTable = () => {
         },
     ];
 
+    const handleOnChange = (pagination: TablePaginationConfig, filters: Record<string, FilterValue | null>, sorter: SorterResult<MutationRecordType>) => {
+        let sort = ''
+
+        if (sorter.order === 'ascend') {
+            sort = `&sort=${sorter.field}`
+        } else if (sorter.order === 'descend') {
+            sort = `&sort=-${sorter.field}`
+        }
+        console.log(sort)
+        setSortQuery(sort)
+    }
 
     return (
 
@@ -139,6 +154,7 @@ const BookTable = () => {
                 actionRef={actionRef}
                 cardBordered
                 request={async (params, sorter) => {
+
 
                     let query = ''
 
@@ -154,12 +170,8 @@ const BookTable = () => {
                         query += `&category=/${params.category}/i`
                     }
 
-                    if (sorter) {
-                        const key = Object.keys(sorter)
-                        const value: any = key.length > 0 ? sorter[key[0]] : ''
-                        if (key && key.length > 0) {
-                            query += `&sort=${value === 'ascend' ? `${key[0]}` : `-${key[0]}`}`
-                        }
+                    if (sortQuery) {
+                        query += sortQuery
                     }
 
                     const res = await getBookAPI(params?.current ?? 1, params?.pageSize ?? 5, query)
@@ -206,6 +218,7 @@ const BookTable = () => {
                         Add new
                     </Button>,
                 ]}
+                onChange={handleOnChange}
             />
 
             <ViewBookDetail
