@@ -9,6 +9,7 @@ import ViewBookDetail from 'components/admin/book/view.book.detail';
 import CreateBook from 'components/admin/book/create.book';
 import { FilterValue, SorterResult } from 'antd/es/table/interface';
 import UpdateBook from './update.book';
+import * as XLSX from 'xlsx'
 
 type TSearch = {
     mainText: string;
@@ -35,6 +36,8 @@ const BookTable = () => {
 
     const [isOpenModalUpdateBook, setIsOpenModalUpdateBook] = useState<boolean>(false)
     const [dataUpdateBook, setDataUpdateBook] = useState<IBookTable | null>(null)
+
+    const [dataBooks, setDataBooks] = useState<IBookTable[] | null>(null)
 
     useEffect(() => {
         const getCategory = async () => {
@@ -161,6 +164,16 @@ const BookTable = () => {
         }
     }
 
+    const handleExport = () => {
+        if (dataBooks && dataBooks.length > 0) {
+            const worksheet = XLSX.utils.json_to_sheet(dataBooks);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+            XLSX.writeFile(workbook, "DataBooks.xlsx");
+        }
+    }
+
+
     return (
 
         <>
@@ -193,6 +206,7 @@ const BookTable = () => {
 
                     if (res.data) {
                         setMeta(res.data.meta)
+                        setDataBooks(res.data.result)
                     }
 
                     return {
@@ -216,7 +230,7 @@ const BookTable = () => {
                         key="button"
                         icon={<ExportOutlined />}
                         onClick={() => {
-
+                            handleExport()
                         }}
                         type="primary"
                     >
