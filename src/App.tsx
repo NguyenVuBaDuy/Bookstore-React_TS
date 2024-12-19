@@ -129,7 +129,12 @@ const App = () => {
 
   return (
     <>
-      {isLoading === false ?
+      {isLoading === false
+        || window.location.pathname === '/'
+        || window.location.pathname === '/login'
+        || window.location.pathname === '/register'
+        || window.location.pathname.startsWith('/book/')
+        ?
         <ConfigProvider locale={enUS}>
           <RouterProvider router={router} />
         </ConfigProvider>

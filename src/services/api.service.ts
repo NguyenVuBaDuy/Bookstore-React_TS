@@ -51,8 +51,8 @@ export const deleteUserAPI = (_id: string) => {
     return axios.delete<IBackendRes<any>>(urlBackend)
 }
 
-export const getBookAPI = (current: number, pageSize: number, query: string) => {
-    const urlBackend = `/api/v1/book?current=${current}&pageSize=${pageSize}${query}`
+export const getBookAPI = (current: number, pageSize: number, query: string, sorter?: string) => {
+    const urlBackend = `/api/v1/book?current=${current}&pageSize=${pageSize}${query}${sorter}`
     return axios.get<IBackendRes<IModelPaginate<IBookTable>>>(urlBackend)
 }
 
