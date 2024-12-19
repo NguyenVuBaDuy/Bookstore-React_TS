@@ -1,5 +1,5 @@
 import Login from "components/login/login"
-import 'pages/login/style/style.scss'
+import 'pages/client/login/style/style.scss'
 
 const LoginPage = () => {
     return (

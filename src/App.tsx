@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import AppLayout from '@/components/layout/client/app.layout'
-import RegisterPage from 'pages/register/register.page'
-import LoginPage from 'pages/login/login.page'
+import RegisterPage from 'pages/client/register/register.page'
+import LoginPage from 'pages/client/login/login.page'
 import { fetchAccount } from 'services/api.service'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -13,6 +13,7 @@ import ManageUser from 'pages/admin/user/manage.user'
 import { ConfigProvider } from 'antd'
 import enUS from 'antd/locale/en_US';
 import ManageBook from 'pages/admin/book/manage.book'
+import HomePage from 'pages/client/home.page/home'
 
 
 
@@ -23,7 +24,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <div>home page</div>
+        element: <HomePage />
       },
       {
         path: 'book',
