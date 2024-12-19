@@ -89,3 +89,8 @@ export const deleteBookAPI = (_id: string) => {
     const urlBackend = `/api/v1/book/${_id}`
     return axios.delete<IBackendRes<any>>(urlBackend)
 }
+
+export const getBookById = (_id: string | undefined) => {
+    const urlBackend = `/api/v1/book/${_id}`
+    return axios.get<IBackendRes<IBookTable>>(urlBackend)
+}

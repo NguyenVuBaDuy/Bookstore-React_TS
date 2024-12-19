@@ -14,6 +14,7 @@ import { ConfigProvider } from 'antd'
 import enUS from 'antd/locale/en_US';
 import ManageBook from 'pages/admin/book/manage.book'
 import HomePage from 'pages/client/home.page/home'
+import BookPage from 'pages/client/book.page/book.page'
 
 
 
@@ -27,11 +28,11 @@ const router = createBrowserRouter([
         element: <HomePage />
       },
       {
-        path: 'book',
-        element: <div>book page</div>
+        path: '/book/:id',
+        element: <BookPage />
       },
       {
-        path: 'order',
+        path: '/order',
         element: (
           <ProtectedRoute>
             <div>order page</div>
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
         )
       },
       {
-        path: 'history',
+        path: '/history',
         element: (
           <ProtectedRoute>
             <div>history page</div>

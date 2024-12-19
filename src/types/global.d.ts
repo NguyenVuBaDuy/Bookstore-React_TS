@@ -80,7 +80,15 @@ declare global {
         category: string;
         createdAt: Date;
         updatedAt: Date;
+        items?: IItems[];
     }
 
     type TCategory = string[]
+
+    interface IItems {
+        original: string;
+        thumbnail: string;
+        originalClass: string;
+        thumbnailClass: string;
+    }
 }

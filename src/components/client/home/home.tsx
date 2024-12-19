@@ -4,6 +4,7 @@ import { Button, Checkbox, Col, Divider, Form, InputNumber, Pagination, Rate, Ro
 import { TabsProps } from "antd/lib";
 import 'components/client/home/home.scss'
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
 
@@ -16,6 +17,7 @@ const Home = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const [filter, setFilter] = useState<string>('')
     const [sorter, setSorter] = useState<string>('&sort=-sold')
+    const navigate = useNavigate()
 
     useEffect(() => {
         const getCategory = async () => {
@@ -216,7 +218,7 @@ const Home = () => {
                                 <Row className='customize-row'>
 
                                     {dataBooks && dataBooks.map((item: IBookTable) => (
-                                        <div className="column">
+                                        <div className="column" onClick={() => (navigate(`/book/${item._id}`))}>
                                             <div className='wrapper'>
                                                 <div className='thumbnail'>
                                                     <img src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${item.thumbnail}`} alt="thumbnail book" />

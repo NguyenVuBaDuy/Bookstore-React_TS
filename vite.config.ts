@@ -7,5 +7,13 @@ export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   server: {
     port: 3000
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler',
+        silenceDeprecations: ['mixed-decls', 'color-functions', 'global-builtin', 'import']
+      }
+    }
   }
 })
