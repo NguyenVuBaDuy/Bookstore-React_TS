@@ -30,7 +30,9 @@ const BookPage = () => {
                 if (res.data) {
                     let data = res.data
                     data.items = getThumbnailAndSliders(data)
-                    setDataBook(data)
+                    setTimeout(() => {
+                        setDataBook(data)
+                    }, 500)
                 }
             }
             getDataBookById()

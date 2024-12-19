@@ -12,6 +12,11 @@
         max-height: 500px !important;
     }
 
+    .image-gallery-thumbnail-image {
+        height: 92px;
+        object-fit: cover;
+    }
+
     .title {
         margin: 5px 0;
         color: #242424;

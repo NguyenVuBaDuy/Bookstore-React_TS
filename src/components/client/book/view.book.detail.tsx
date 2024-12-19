@@ -5,26 +5,11 @@ import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { BsCartPlus } from "react-icons/bs";
 import { useState } from "react";
 import ModalGallery from "./modal.gallery";
+import SkeletonBookLoader from 'components/client/book/skeleton.book.loader'
 
 interface IProps {
     dataBook: IBookTable;
 }
-
-
-const images = [
-    {
-        original: "https://picsum.photos/id/1018/1000/600/",
-        thumbnail: "https://picsum.photos/id/1018/250/150/",
-    },
-    {
-        original: "https://picsum.photos/id/1015/1000/600/",
-        thumbnail: "https://picsum.photos/id/1015/250/150/",
-    },
-    {
-        original: "https://picsum.photos/id/1019/1000/600/",
-        thumbnail: "https://picsum.photos/id/1019/250/150/",
-    },
-];
 
 
 const ViewBookDetail = (props: IProps) => {
@@ -112,7 +97,7 @@ const ViewBookDetail = (props: IProps) => {
                             </Col>
                         </Row>
                         :
-                        <div>skeleton</div>
+                        <SkeletonBookLoader />
                     }
                 </div>
             </div>
