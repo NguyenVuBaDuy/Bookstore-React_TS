@@ -6,6 +6,8 @@ import { BsCartPlus } from "react-icons/bs";
 import { useState } from "react";
 import ModalGallery from "./modal.gallery";
 import SkeletonBookLoader from 'components/client/book/skeleton.book.loader'
+import { useDispatch, useSelector } from "react-redux";
+import { doAddToCartAction } from "@/redux/order/orderSlice";
 
 interface IProps {
     dataBook: IBookTable;
@@ -17,11 +19,36 @@ const ViewBookDetail = (props: IProps) => {
     const { dataBook } = props
     const [currentIndex, setCurrentIndex] = useState<number>(0)
     const [isModalImageOpen, setIsModalImageOpen] = useState<boolean>(false)
+    const [currentQuantity, setCurrentQuantity] = useState<any>(1)
+    const dispatch = useDispatch()
+
     const images = dataBook?.items ?? []
     const title: string = dataBook?.mainText ?? ''
 
     const handleOnClickImage = () => {
         setIsModalImageOpen(true)
+    }
+
+    const handleChangeQuantityByButton = (type: string) => {
+        if (type === 'plus') {
+            setCurrentQuantity(+currentQuantity < dataBook.quantity ? +currentQuantity + 1 : dataBook.quantity)
+        } else if (type === 'minus') {
+            setCurrentQuantity(+currentQuantity > 1 ? +currentQuantity - 1 : 1)
+        }
+    }
+
+    const handleChangeQuantityByInput = (value: any) => {
+        if (value <= +dataBook.quantity && value >= 1) {
+            setCurrentQuantity(value)
+        } else if (value > +dataBook.quantity) {
+            setCurrentQuantity(+dataBook.quantity)
+        } else if (value === '') {
+            setCurrentQuantity('')
+        }
+    }
+
+    const handleAddToCart = () => {
+        dispatch(doAddToCartAction({ quantity: currentQuantity, _id: dataBook._id, detail: dataBook }))
     }
 
     return (
@@ -79,15 +106,23 @@ const ViewBookDetail = (props: IProps) => {
                                     <div className='quantity'>
                                         <span className='left-side'>Quantity</span>
                                         <span className='right-side'>
-                                            <button><MinusOutlined /></button>
-                                            <input />
-                                            <button><PlusOutlined /></button>
+                                            <button onClick={() => { handleChangeQuantityByButton('minus') }}><MinusOutlined /></button>
+                                            <input
+                                                value={currentQuantity}
+                                                onChange={(event) => { handleChangeQuantityByInput(event.target.value) }}
+                                                onBlur={(event) => {
+                                                    if (event.target.value === '') {
+                                                        setCurrentQuantity(1)
+                                                    }
+                                                }}
+                                            />
+                                            <button onClick={() => { handleChangeQuantityByButton('plus') }}><PlusOutlined /></button>
                                         </span>
                                         <span style={{ marginLeft: "10px", color: "#757575" }}>{dataBook.quantity} available</span>
                                     </div>
 
                                     <div className='buy'>
-                                        <button className='cart'>
+                                        <button className='cart' onClick={handleAddToCart}>
                                             <BsCartPlus className='icon-cart' />
                                             <span>Add To Cart</span>
                                         </button>

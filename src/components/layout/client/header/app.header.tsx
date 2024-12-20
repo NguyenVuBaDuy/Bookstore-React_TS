@@ -13,6 +13,7 @@ const AppHeader = () => {
 
     const user = useSelector((state: IRedux) => state.account.user)
     const role = user.role
+    const cart = useSelector((state: IRedux) => state.order.cart)
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -99,7 +100,7 @@ const AppHeader = () => {
 
                             <li className="navigation__item">
                                 <Badge
-                                    count={5}
+                                    count={cart.length}
                                     size={"small"}
                                     showZero
                                 >

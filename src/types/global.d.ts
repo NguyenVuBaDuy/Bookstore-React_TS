@@ -7,6 +7,13 @@ declare global {
             isAuthenticated: boolean;
             isLoadingApp: boolean;
             user: IDataUser;
+        },
+        order: {
+            cart: {
+                quantity: number;
+                _id: string;
+                detail: IBookTable
+            }[]
         }
     }
 
