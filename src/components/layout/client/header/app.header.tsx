@@ -1,5 +1,5 @@
 import { DownOutlined, HomeOutlined, SearchOutlined, SmileOutlined } from "@ant-design/icons"
-import { Avatar, Badge, Divider, Drawer, Dropdown, MenuProps, message, notification, Space } from "antd"
+import { Avatar, Badge, Divider, Drawer, Dropdown, MenuProps, message, notification, Popover, Space } from "antd"
 import { FaReact } from "react-icons/fa"
 import { FiShoppingCart } from "react-icons/fi"
 import { useDispatch, useSelector } from "react-redux"
@@ -7,6 +7,7 @@ import 'components/layout/client/header/app.header.scss'
 import { useNavigate } from "react-router-dom"
 import { logoutAPI } from 'services/api.service'
 import { doLogoutAction } from 'redux/account/accountSlice'
+import { BsCart } from "react-icons/bs"
 const AppHeader = () => {
 
     const isAuthenticated = useSelector((state: IRedux) => state.account.isAuthenticated)
@@ -57,6 +58,35 @@ const AppHeader = () => {
         },
     ];
 
+    const content = (
+        cart.length > 0 ?
+            <div className="pop-cart">
+                <div className="content-cart">
+                    {cart?.map((item, index) => {
+                        if (index >= 5) return
+                        return (
+                            <div className="book">
+                                <img src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${item?.detail?.thumbnail}`} />
+                                <div className='mainText'>{item?.detail?.mainText}</div>
+                                <div className="price">
+                                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item?.detail?.price)}
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
+                <div className="footer-cart">
+                    <div style={{ color: '#757575' }}>{cart.length <= 5 ? '' : `${cart.length - 5} other product${cart.length != 6 ? 's' : ''}`}</div>
+                    <button className="button-cart" onClick={() => { navigate('/order') }}>View cart</button>
+                </div>
+            </div>
+            :
+            <div style={{ padding: "35px 40px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <BsCart style={{ fontSize: "48px", color: "red", marginBottom: "10px" }} />
+                <div style={{ color: '#757575' }}>There are no products yet</div>
+            </div>
+    )
+
     return (
         <>
             <div className='header-container'>
@@ -99,13 +129,21 @@ const AppHeader = () => {
                             <li className="navigation__item mobile"><Divider type='vertical' /></li>
 
                             <li className="navigation__item">
-                                <Badge
-                                    count={cart.length}
-                                    size={"small"}
-                                    showZero
+                                <Popover
+                                    placement={'bottomRight'}
+                                    content={content}
+                                    title={cart.length > 0 ? "New products added" : ''}
+                                    rootClassName="popover-carts"
+                                    className='popover-carts'
                                 >
-                                    <FiShoppingCart className='icon-cart' />
-                                </Badge>
+                                    <Badge
+                                        count={cart.length}
+                                        size={"small"}
+                                        showZero
+                                    >
+                                        <FiShoppingCart className='icon-cart' />
+                                    </Badge>
+                                </Popover>
 
                             </li>
                         </ul>

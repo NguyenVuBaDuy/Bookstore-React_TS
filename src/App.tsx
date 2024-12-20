@@ -15,6 +15,7 @@ import enUS from 'antd/locale/en_US';
 import ManageBook from 'pages/admin/book/manage.book'
 import HomePage from 'pages/client/home.page/home'
 import BookPage from 'pages/client/book.page/book.page'
+import '@/style/global.scss'
 
 
 
