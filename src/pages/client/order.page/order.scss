@@ -1,0 +1,150 @@
+.orderpage-container {
+    .order-list {
+        .item {
+            background-color: white;
+            box-sizing: border-box;
+            padding: 20px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        .right-side {
+            display: flex;
+            margin-left: 15px;
+
+            input[type="number"]::-webkit-inner-spin-button,
+            input[type="number"]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            input {
+                width: 70px;
+                height: 32px;
+                border-left: 0;
+                border-right: 0;
+                font-size: 16px;
+                font-weight: 400;
+                box-sizing: border-box;
+                text-align: center;
+                cursor: text;
+                border-radius: 0;
+                border: 1px solid rgba(0, 0, 0, 0.09);
+                outline: none;
+            }
+
+            button {
+                outline: none;
+                cursor: pointer;
+                border: 0;
+                font-size: .875rem;
+                font-weight: 300;
+                line-height: 1;
+                letter-spacing: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background-color .1s cubic-bezier(.4, 0, .6, 1);
+                border: 1px solid rgba(0, 0, 0, .09);
+                border-radius: 2px;
+                background: transparent;
+                color: rgba(0, 0, 0, .8);
+                width: 32px;
+                height: 32px;
+            }
+        }
+    }
+
+    .bill {
+        background-color: white;
+        padding: 20px 20px;
+        border-radius: 5px;
+
+        .subtotal,
+        .total {
+            display: flex;
+            justify-content: space-between;
+
+            .price {
+                color: red;
+            }
+        }
+
+        .total {
+            font-size: 18px;
+        }
+
+        .button-buy {
+            button {
+                display: block;
+                background-color: #ee4d2d;
+                color: #fff;
+                border: 1px solid #ee4d2d;
+                box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .03);
+                cursor: pointer;
+                border-radius: 3px;
+
+                font-size: 16px;
+                height: 40px;
+                padding: 0 20px;
+                width: 100%;
+            }
+        }
+    }
+
+    .order-sum {
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        gap: 20px;
+
+        .calculate {
+            display: flex;
+            justify-content: space-between;
+
+            .sum-final {
+                color: #fe3834;
+                font-size: 22px;
+                font-weight: 400;
+            }
+        }
+
+        button {
+            margin-top: 15px;
+            background-color: #ee4d2d;
+            color: #fff;
+            border: 1px solid #ee4d2d;
+            box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .03);
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 16px;
+            height: 40px;
+            padding: 0 20px;
+
+            &:hover {
+                background-color: #e45b3f;
+
+            }
+        }
+
+        .info,
+        .method,
+        .address {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+    }
+}

@@ -94,3 +94,18 @@ export const getBookById = (_id: string | undefined) => {
     const urlBackend = `/api/v1/book/${_id}`
     return axios.get<IBackendRes<IBookTable>>(urlBackend)
 }
+
+export const createOrderAPI = (data: {
+    name: string;
+    address: string;
+    phone: string;
+    totalPrice: number;
+    detail: {
+        bookName: string;
+        quantity: number;
+        _id: string;
+    }[];
+}) => {
+    const urlBackend = '/api/v1/order'
+    return axios.post<IBackendRes<any>>(urlBackend, data)
+}

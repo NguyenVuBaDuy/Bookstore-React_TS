@@ -16,6 +16,7 @@ import ManageBook from 'pages/admin/book/manage.book'
 import HomePage from 'pages/client/home.page/home'
 import BookPage from 'pages/client/book.page/book.page'
 import '@/style/global.scss'
+import OrderPage from 'pages/client/order.page/order.page'
 
 
 
@@ -36,7 +37,7 @@ const router = createBrowserRouter([
         path: '/order',
         element: (
           <ProtectedRoute>
-            <div>order page</div>
+            <OrderPage />
           </ProtectedRoute>
         )
       },

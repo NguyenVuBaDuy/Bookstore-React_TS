@@ -4,7 +4,7 @@ import { message } from 'antd';
 interface ICart {
     quantity: number;
     _id: string;
-    detail: IBookTable
+    detail: IBookTable;
 }
 
 interface IDataOrder {
@@ -29,10 +29,27 @@ const orderSlice = createSlice({
             }
             state.cart = newCart
             message.success('The product has been added to the cart!')
+        },
+        doUpdateOrderAction: (state, action: PayloadAction<ICart>) => {
+            const newCart = state.cart
+            const index: number = newCart.findIndex((item: ICart) => item._id === action.payload._id)
+            if (index > -1) {
+                newCart[index] = action.payload
+            }
+            state.cart = newCart
+        },
+        doDeleteOrderAction: (state, action: PayloadAction<ICart>) => {
+            let newCart = state.cart
+            newCart = newCart.filter((item: ICart) => item._id != action.payload._id)
+            state.cart = newCart
+        },
+        doResetCartAction: (state) => {
+            state.cart = []
         }
     },
 });
 
-export const { doAddToCartAction } = orderSlice.actions;
+export const { doAddToCartAction, doUpdateOrderAction,
+    doDeleteOrderAction, doResetCartAction } = orderSlice.actions;
 
 export default orderSlice.reducer;
