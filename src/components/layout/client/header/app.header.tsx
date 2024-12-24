@@ -48,6 +48,15 @@ const AppHeader = () => {
             ),
         },
         {
+            key: 'History',
+            label: (
+                <div
+                    style={{ width: "100%" }}
+                    onClick={() => { navigate('/history') }}
+                >Order History</div>
+            ),
+        },
+        {
             key: 'Logout',
             label: (
                 <div
@@ -56,6 +65,7 @@ const AppHeader = () => {
                 >Logout</div>
             ),
         },
+
     ];
 
     const content = (

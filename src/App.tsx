@@ -17,6 +17,7 @@ import HomePage from 'pages/client/home.page/home'
 import BookPage from 'pages/client/book.page/book.page'
 import '@/style/global.scss'
 import OrderPage from 'pages/client/order.page/order.page'
+import HistoryPage from 'pages/client/history.page/history.page'
 
 
 
@@ -45,7 +46,7 @@ const router = createBrowserRouter([
         path: '/history',
         element: (
           <ProtectedRoute>
-            <div>history page</div>
+            <HistoryPage />
           </ProtectedRoute>
         )
       }

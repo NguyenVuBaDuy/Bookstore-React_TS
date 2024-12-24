@@ -98,4 +98,20 @@ declare global {
         originalClass: string;
         thumbnailClass: string;
     }
+
+    interface IOrder {
+        _id: string;
+        name: string;
+        email: string;
+        phone: string;
+        userId: string;
+        detail: {
+            bookName: string;
+            quantity: number;
+            _id: string;
+        }[];
+        totalPrice: number;
+        createdAt: Date;
+        updatedAt: Date;
+    }
 }

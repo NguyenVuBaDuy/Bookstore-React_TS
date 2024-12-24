@@ -109,3 +109,8 @@ export const createOrderAPI = (data: {
     const urlBackend = '/api/v1/order'
     return axios.post<IBackendRes<any>>(urlBackend, data)
 }
+
+export const getOrderHistory = () => {
+    const urlBackend = '/api/v1/history'
+    return axios.get<IBackendRes<IOrder>>(urlBackend)
+}
